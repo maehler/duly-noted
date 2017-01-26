@@ -6,7 +6,9 @@
   "engines": {
     "atom": "*"
   },
-  "dependencies": {},
+  "dependencies": {
+    "atom-space-pen-views": "^2.1.1"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/maehler/duly-noted.git"

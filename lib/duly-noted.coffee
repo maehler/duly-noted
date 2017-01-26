@@ -2,6 +2,8 @@ fs = require 'fs'
 path = require 'path'
 utils = require './utils'
 
+{CompositeDisposable} = require 'atom'
+
 atom.config.onDidChange('duly-noted.noteLocation', (event) ->
   if not fs.existsSync event.newValue
     atom.notifications.addError('Path does not exist: ' + event.newValue)
@@ -10,6 +12,8 @@ atom.config.onDidChange('duly-noted.noteLocation', (event) ->
 defaultNoteLocation = path.join(utils.getHomeDir(), '.notes')
 
 module.exports =
+  notebookView: null
+
   config:
     noteLocation:
       title: 'Location of notes'
@@ -30,3 +34,18 @@ module.exports =
       fs.mkdirSync atom.config.get('duly-noted.noteLocation')
     else if not fs.existsSync(atom.config.get('duly-noted.noteLocation'))
       atom.notifications.addError("Note path does not exist: #{atom.config.get('duly-noted.noteLocation')}")
+
+    @disposables = new CompositeDisposable
+    @createView()
+
+    @disposables.add atom.commands.add('atom-workspace', {
+      'duly-noted:test': => @createView().test()
+      'duly-noted:show': => @createView().show()
+      'duly-noted:hide': => @createView().hide()
+    })
+
+  createView: ->
+    unless @notebookView?
+      NotebookView = require './notebook-view'
+      @notebookView = new NotebookView(@state)
+    @notebookView

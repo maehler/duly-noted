@@ -1,0 +1,18 @@
+{
+  "name": "duly-noted",
+  "version": "0.0.0",
+  "description": "Note taking in Atom",
+  "main": "lib/duly-noted.coffee",
+  "engines": {
+    "atom": "*"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maehler/duly-noted.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maehler/duly-noted/issues"
+  },
+  "license": "MIT"
+}

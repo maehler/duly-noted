@@ -1,0 +1,9 @@
+"menu": [{
+  "label": "Packages"
+  "submenu": [
+    "label": "Duly Noted"
+    "submenu": [
+      {"label": "New notepad", "command": "noted:new-notepad"}
+    ]
+  ]
+  }]

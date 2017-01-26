@@ -9,11 +9,14 @@ module.exports =
       @div =>
         @h1 'Duly noted'
 
+    serialize: ->
+      showing: @panel.isVisible()
+
     show: ->
-      if !@panel?
-        @panel = atom.workspace.addRightPanel(item: @)
-      else
+      if @panel?
         @panel.show()
+      else
+        @panel = atom.workspace.addRightPanel(item: @)
 
     hide: ->
       @panel.hide() unless !@panel?

@@ -28,7 +28,7 @@ module.exports =
       type: 'string'
       default: '.txt'
 
-  activate: (state) ->
+  activate: (@state) ->
     # Only create the note directory if it matches the default
     if not fs.existsSync(atom.config.get('duly-noted.noteLocation')) and atom.config.get('duly-noted.noteLocation') is defaultNoteLocation
       fs.mkdirSync atom.config.get('duly-noted.noteLocation')
@@ -37,6 +37,7 @@ module.exports =
 
     @disposables = new CompositeDisposable
     @createView()
+    @createView().show() if @state.showing
 
     @disposables.add atom.commands.add('atom-workspace', {
       'duly-noted:test': => @createView().test()
@@ -49,3 +50,9 @@ module.exports =
       NotebookView = require './notebook-view'
       @notebookView = new NotebookView(@state)
     @notebookView
+
+  serialize: ->
+    if @notebookView?
+      @notebookView.serialize()
+    else
+      @state

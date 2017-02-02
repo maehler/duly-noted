@@ -1,13 +1,25 @@
 {CompositeDisposable} = require 'atom'
 {$, View} = require 'atom-space-pen-views'
+Directory = require './directory'
+DirectoryView = require './directory-view'
 
 module.exports =
   class NotebookView extends View
     panel: null
 
+    initialize: (state) ->
+      @root = @populate()
+
     @content: ->
       @div =>
-        @h1 'Duly noted'
+        @ol tabindex: -1, outlet: 'list'
+
+    populate: ->
+      directory = new Directory('Notebooks', atom.config.get('duly-noted.noteLocation'))
+      root = new DirectoryView()
+      root.initialize(directory)
+      @list[0].appendChild(root)
+      root
 
     serialize: ->
       showing: @panel.isVisible()
@@ -20,6 +32,3 @@ module.exports =
 
     hide: ->
       @panel.hide() unless !@panel?
-
-    test: ->
-      console.log 'this is a test'

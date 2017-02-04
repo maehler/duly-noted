@@ -15,7 +15,11 @@ module.exports =
         @ol tabindex: -1, outlet: 'list'
 
     populate: ->
-      directory = new Directory('Notebooks', atom.config.get('duly-noted.noteLocation'))
+      directory = new Directory(
+        name = 'Notebooks',
+        path = atom.config.get('duly-noted.noteLocation'),
+        isExpanded = true
+      )
       root = new DirectoryView()
       root.initialize(directory)
       @list[0].appendChild(root)

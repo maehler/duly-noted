@@ -1,7 +1,9 @@
 {CompositeDisposable} = require 'atom'
 {$, View} = require 'atom-space-pen-views'
 Directory = require './directory'
+File = require './file'
 DirectoryView = require './directory-view'
+FileView = require './file-view'
 
 module.exports =
   class NotebookView extends View
@@ -14,7 +16,10 @@ module.exports =
 
     @content: ->
       @div =>
-        @ol tabindex: -1, outlet: 'list'
+        @div class: 'notebook-view', =>
+          @ol tabindex: -1, outlet: 'list',
+        @div class: 'note-view', =>
+          @ol class: 'note-list', outlet: 'noteList'
 
     populate: ->
       directory = new Directory(
@@ -36,9 +41,18 @@ module.exports =
       entry = e.currentTarget
       isRecursive = e.altKey or false
       if entry instanceof DirectoryView
+        @selectEntry(entry)
         entry.toggleExpansion(isRecursive)
 
       false
+
+    selectEntry: (entry) ->
+      entry.classList.add('selected')
+      @noteList[0].innerHTML = ''
+      for name, file of entry.directory.entries when file instanceof File
+        fileView = new FileView()
+        fileView.initialize(file)
+        @noteList[0].appendChild(fileView)
 
     serialize: ->
       showing: @panel.isVisible()

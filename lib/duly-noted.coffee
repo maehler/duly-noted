@@ -40,7 +40,6 @@ module.exports =
     @createView().show() if @state.showing
 
     @disposables.add atom.commands.add('atom-workspace', {
-      'duly-noted:test': => @createView().test()
       'duly-noted:show': => @createView().show()
       'duly-noted:hide': => @createView().hide()
     })

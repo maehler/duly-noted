@@ -5,7 +5,10 @@ class DirectoryView extends HTMLElement
     @name = @directory.name
     @path = @directory.path
 
+    @classList.add('entry', 'directory', 'collapsed')
+
     @entries = document.createElement('ol')
+    @entries.classList.add('entries')
 
     @directoryName = document.createElement('span')
     @directoryName.dataset.name = @directory.name
@@ -17,16 +20,35 @@ class DirectoryView extends HTMLElement
 
     @expand() if @directory.isExpanded
 
-  expand: ->
-    unless @isExpanded?
-      @isExpanded = true
-      @directory.expand()
+  toggleExpansion: (isRecursive) ->
+    if @isExpanded then @collapse(isRecursive) else @expand(isRecursive)
 
-      console.log(@directory.entries)
+  expand: (isRecursive = false) ->
+    unless @isExpanded
+      @isExpanded = true
+      @classList.add('expanded')
+      @classList.remove('collapsed')
+      @directory.expand()
 
       for name, entry of @directory.entries
         view = @createViewForEntry(entry)
         @entries.appendChild(view) unless !view
+
+      if isRecursive
+        for entry in @entries.children when entry instanceof DirectoryView
+          entry.expand(true)
+
+  collapse: (isRecursive = false) ->
+    @isExpanded = false
+
+    if isRecursive
+      for entry in @entries.children when entry.isExpanded
+        entry.collapse(true)
+
+    @classList.remove('expanded')
+    @classList.add('collapsed')
+
+    @entries.innerHTML = ''
 
   createViewForEntry: (entry) ->
     if entry instanceof Directory

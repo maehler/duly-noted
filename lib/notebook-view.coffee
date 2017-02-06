@@ -15,11 +15,12 @@ module.exports =
       @handleEvents()
 
     @content: ->
-      @div =>
+      @div class: 'notebook-view-resizer', =>
         @div class: 'notebook-view', =>
           @ol tabindex: -1, outlet: 'list',
         @div class: 'note-view', =>
           @ol class: 'note-list', outlet: 'noteList'
+        @div class: 'notebook-view-resize-handle'
 
     populate: ->
       directory = new Directory(
@@ -36,6 +37,21 @@ module.exports =
       @on 'click', '.entry', (e) =>
         return if e.target.classList.contains('entries')
         @entryClicked(e)
+
+      @on 'mousedown', '.notebook-view-resize-handle', (e) => @resizeStarted(e)
+
+    resizeStarted: =>
+      $(document).on('mousemove', @resizeNoteView)
+      $(document).on('mouseup', @resizeStopped)
+
+    resizeStopped: =>
+      $(document).off('mousemove', @resizeNoteView)
+      $(document).off('mouseup', @resizeStopped)
+
+    resizeNoteView: ({pageX, which}) =>
+      return @resizeStopped() unless which is 1
+      width = @outerWidth() + @offset().left - pageX
+      @width(width)
 
     entryClicked: (e) ->
       entry = e.currentTarget

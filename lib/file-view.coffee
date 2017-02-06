@@ -3,6 +3,8 @@ class FileView extends HTMLElement
     @name = @file.name
     @path = @file.path
 
+    @classList.add('note')
+
     fileName = document.createElement('span')
     fileName.textContent = @name
 

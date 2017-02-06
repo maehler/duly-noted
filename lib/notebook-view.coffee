@@ -37,6 +37,7 @@ module.exports =
       @on 'click', '.entry', (e) =>
         return if e.target.classList.contains('entries')
         @entryClicked(e)
+      @on 'click', '.note', (e) => @noteClicked(e)
 
       @on 'mousedown', '.notebook-view-resize-handle', (e) => @resizeStarted(e)
 
@@ -59,6 +60,12 @@ module.exports =
       if entry instanceof DirectoryView
         @selectEntry(entry)
         entry.toggleExpansion(isRecursive)
+
+      false
+
+    noteClicked: (e) ->
+      note = e.currentTarget
+      atom.workspace.open(note.path)
 
       false
 

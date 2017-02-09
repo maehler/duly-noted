@@ -17,9 +17,9 @@ module.exports =
     @content: ->
       @div class: 'notebook-view-resizer', =>
         @div class: 'notebook-view', =>
-          @ol tabindex: -1, outlet: 'list',
+          @ol class: 'notebook-list entries', tabindex: -1, outlet: 'list',
         @div class: 'note-view', =>
-          @ol class: 'note-list', outlet: 'noteList'
+          @ol class: 'note-list', outlet: 'noteList',
         @div class: 'notebook-view-resize-handle'
 
     populate: ->
@@ -70,12 +70,19 @@ module.exports =
       false
 
     selectEntry: (entry) ->
+      @deselectEntries()
       entry.classList.add('selected')
       @noteList[0].innerHTML = ''
       for name, file of entry.directory.entries when file instanceof File
         fileView = new FileView()
         fileView.initialize(file)
         @noteList[0].appendChild(fileView)
+
+    getSelectedEntries: ->
+      @list[0].querySelectorAll('.selected')
+
+    deselectEntries: (entries=@getSelectedEntries()) ->
+      selected.classList.remove('selected') for selected in entries
 
     serialize: ->
       showing: @panel.isVisible()

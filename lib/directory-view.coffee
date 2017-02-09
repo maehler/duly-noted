@@ -5,17 +5,23 @@ class DirectoryView extends HTMLElement
     @name = @directory.name
     @path = @directory.path
 
-    @classList.add('entry', 'directory', 'collapsed')
+    @classList.add('notebook', 'entry', 'directory', 'collapsed')
+    @classList.add('leaf') if @directory.isLeaf
 
     @entries = document.createElement('ol')
-    @entries.classList.add('entries')
+    @entries.classList.add('notebook-list', 'entries')
+
+    @header = document.createElement('div')
+    @header.classList.add('header')
 
     @directoryName = document.createElement('span')
     @directoryName.dataset.name = @directory.name
     @directoryName.title = @directory.name
     @directoryName.textContent = @directory.name
 
-    @appendChild(@directoryName)
+    @header.appendChild(@directoryName)
+
+    @appendChild(@header)
     @appendChild(@entries)
 
     @expand() if @directory.isExpanded

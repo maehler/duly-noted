@@ -7,6 +7,7 @@ module.exports =
   class Directory
     constructor: (@name, @path, @isExpanded) ->
       @entries = {}
+      @isLeaf = false
 
       @reload()
 
@@ -24,6 +25,8 @@ module.exports =
           directories.push(new Directory(name, fullPath))
         else if stat.isFile?()
           files.push(new File(name, fullPath))
+
+      @isLeaf = directories.length == 0
 
       directories.concat(files)
 

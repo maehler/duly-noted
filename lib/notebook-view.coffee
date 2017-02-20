@@ -18,6 +18,13 @@ module.exports =
       @div class: 'notebook-view-resizer', =>
         @div class: 'notebook-view', =>
           @ol class: 'notebook-list entries', tabindex: -1, outlet: 'list',
+        @div class: 'note-view-toolbar', =>
+          @button class: 'add-notebook', title: 'Add notebook', =>
+            @i class: 'fa fa-plus right-space'
+            @i class: 'fa fa-folder-o left-space'
+          @button class: 'add-note', title: 'Add note', =>
+            @i class: 'fa fa-plus right-space'
+            @i class: 'fa fa-file-text-o left-space'
         @div class: 'note-view', =>
           @ol class: 'note-list', outlet: 'noteList',
         @div class: 'notebook-view-resize-handle'
